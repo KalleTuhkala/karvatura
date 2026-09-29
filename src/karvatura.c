@@ -17,9 +17,6 @@
 #define PNG_VOITIT		"res/image/voitit.png"
 #define PNG_HAVISIT 	"res/image/havisit.png"
 
-// MP4s
-#define MP4_SYO				"res/video/syo.mp4"
-
 // WAVs
 #define WAV_ANNATKO		"res/audio/annatko.wav"
 #define WAV_VOITIT		"res/audio/voitit.wav"
