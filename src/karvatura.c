@@ -14,11 +14,14 @@
 
 // PNGs
 #define PNG_ANNATKO		"res/image/annatko.png"
+#define PNG_MAISTUU_1	"res/image/maistuu1.png"
+#define PNG_MAISTUU_2	"res/image/maistuu2.png"
 #define PNG_VOITIT		"res/image/voitit.png"
 #define PNG_HAVISIT 	"res/image/havisit.png"
 
 // WAVs
 #define WAV_ANNATKO		"res/audio/annatko.wav"
+#define WAV_MAISTUU		"res/audio/maistuu.wav"
 #define WAV_VOITIT		"res/audio/voitit.wav"
 
 
@@ -46,15 +49,19 @@ int main() {
 	}
 	
 	// Load PNGs
-	SDL_Surface* png_Annatko 	= SDL_LoadPNG(PNG_ANNATKO);	
-	SDL_Surface* png_Voitit 	= SDL_LoadPNG(PNG_VOITIT);
-	SDL_Surface* png_Havisit 	= SDL_LoadPNG(PNG_HAVISIT);
+	SDL_Surface* png_Annatko 		= SDL_LoadPNG(PNG_ANNATKO);
+	SDL_Surface* png_Maistuu_1	= SDL_LoadPNG(PNG_MAISTUU_1);
+	SDL_Surface* png_Maistuu_2	= SDL_LoadPNG(PNG_MAISTUU_2);	
+	SDL_Surface* png_Voitit 		= SDL_LoadPNG(PNG_VOITIT);
+	SDL_Surface* png_Havisit 		= SDL_LoadPNG(PNG_HAVISIT);
 	
-	if (png_Annatko == NULL || png_Voitit == NULL || png_Havisit == NULL) {
+	if (png_Annatko == NULL || png_Maistuu_1 == NULL || png_Maistuu_2 == NULL || png_Voitit == NULL || png_Havisit == NULL) {
 		printf("SDL_LoadPNG: Error loading PNG image\n");
 		printf("SDL_LoadPNG: %s\n", SDL_GetError());
 
 		SDL_DestroySurface(png_Annatko);
+		SDL_DestroySurface(png_Maistuu_1);
+		SDL_DestroySurface(png_Maistuu_2);
 		SDL_DestroySurface(png_Voitit);
 		SDL_DestroySurface(png_Havisit);
 	
@@ -64,19 +71,25 @@ int main() {
 	}
 
 	// Create Textures
-	SDL_Texture* tex_Annatko = SDL_CreateTextureFromSurface(renderer, png_Annatko);
-	SDL_Texture* tex_Voitit 	= SDL_CreateTextureFromSurface(renderer, png_Voitit);
-	SDL_Texture* tex_Havisit	= SDL_CreateTextureFromSurface(renderer, png_Havisit);
+	SDL_Texture* tex_Annatko 		= SDL_CreateTextureFromSurface(renderer, png_Annatko);
+	SDL_Texture* tex_Maistuu_1	= SDL_CreateTextureFromSurface(renderer, png_Maistuu_1);
+	SDL_Texture* tex_Maistuu_2	= SDL_CreateTextureFromSurface(renderer, png_Maistuu_2);
+	SDL_Texture* tex_Voitit 		= SDL_CreateTextureFromSurface(renderer, png_Voitit);
+	SDL_Texture* tex_Havisit		= SDL_CreateTextureFromSurface(renderer, png_Havisit);
 	
-	if(tex_Annatko == NULL || tex_Voitit == NULL || tex_Havisit == NULL) {
+	if(tex_Annatko == NULL || tex_Maistuu_1 == NULL || tex_Maistuu_2 == NULL || tex_Voitit == NULL || tex_Havisit == NULL) {
 		printf("SDL_CreateTextureFromSurface: Error creating texture from surface\n");
 		printf("SDL_CreateTextureFromSurface: %s\n", SDL_GetError());
 		
 		SDL_DestroyTexture(tex_Annatko);
+		SDL_DestroyTexture(tex_Maistuu_1);
+		SDL_DestroyTexture(tex_Maistuu_2);
 		SDL_DestroyTexture(tex_Voitit);
 		SDL_DestroyTexture(tex_Havisit);
 
 		SDL_DestroySurface(png_Annatko);
+		SDL_DestroySurface(png_Maistuu_1);
+		SDL_DestroySurface(png_Maistuu_2);
 		SDL_DestroySurface(png_Voitit);
 		SDL_DestroySurface(png_Havisit);
 	
@@ -107,13 +120,17 @@ int main() {
 
 	// Deinit SDL
 	SDL_DestroyTexture(tex_Annatko);
+	SDL_DestroyTexture(tex_Maistuu_1);
+	SDL_DestroyTexture(tex_Maistuu_2);
 	SDL_DestroyTexture(tex_Voitit);
 	SDL_DestroyTexture(tex_Havisit);
 
 	SDL_DestroySurface(png_Annatko);
+	SDL_DestroySurface(png_Maistuu_1);
+	SDL_DestroySurface(png_Maistuu_2);
 	SDL_DestroySurface(png_Voitit);
 	SDL_DestroySurface(png_Havisit);
-	
+
 	SDL_Quit();
 	return 0;
 
