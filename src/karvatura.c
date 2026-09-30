@@ -48,6 +48,32 @@ int main() {
 
 	}
 	
+	// Open Default Playback Device as a audio stream
+	SDL_AudioStream* def_Stream = SDL_OpenAudioDeviceStream(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, NULL, NULL, NULL);	
+	if(def_Stream == NULL) {
+		printf("SDL_OpenAudioDeviceStream: Error opening default playback device as stream\n");
+		printf("SDL_OpenAudioDeviceStream: %s\n", SDL_GetError());
+		
+		SDL_DestroyRenderer(renderer);
+		SDL_DestroyWindow(window);
+
+		SDL_Quit();
+		return -1;
+	
+	}
+	// unpause def_Stream
+	if (SDL_ResumeAudioStreamDevice(def_Stream) == false) {
+		printf("SDL_ResumeAudioStreamDevice: Error resuming audio stream device\n");
+		printf("SDL_ResumeAudioStreamDevice: %s\n", SDL_GetError());
+		
+		SDL_DestroyRenderer(renderer);
+		SDL_DestroyWindow(window);
+
+		SDL_Quit();
+		return -1;
+		
+	}
+
 	// Load PNGs
 	SDL_Surface* png_Annatko 		= SDL_LoadPNG(PNG_ANNATKO);
 	SDL_Surface* png_Maistuu_1	= SDL_LoadPNG(PNG_MAISTUU_1);
@@ -65,6 +91,9 @@ int main() {
 		SDL_DestroySurface(png_Voitit);
 		SDL_DestroySurface(png_Havisit);
 	
+		SDL_DestroyRenderer(renderer);
+		SDL_DestroyWindow(window);
+
 		SDL_Quit();
 		return -1;
 	
@@ -92,10 +121,113 @@ int main() {
 		SDL_DestroySurface(png_Maistuu_2);
 		SDL_DestroySurface(png_Voitit);
 		SDL_DestroySurface(png_Havisit);
-	
+		
+		SDL_DestroyRenderer(renderer);
+		SDL_DestroyWindow(window);
+
 		SDL_Quit();
 		return -1;
 		
+	}
+
+	// Create the Audio Specs
+	// Audio Spec structs
+	SDL_AudioSpec wav_Annatko 	= {.format = SDL_AUDIO_S16LE, .channels = 1, .freq = 44100};
+	SDL_AudioSpec wav_Maistuu 	= {.format = SDL_AUDIO_S16LE, .channels = 1, .freq = 44100};
+	SDL_AudioSpec wav_Voitit	 	= {.format = SDL_AUDIO_S16LE, .channels = 1, .freq = 44100};
+	
+	// Audio buffers
+	Uint8* wav_Annatko_Buf 	= NULL;	
+	Uint8* wav_Maistuu_Buf 	= NULL;	
+	Uint8* wav_Voitit_Buf 	= NULL;	
+
+	// Audio lenghts
+	Uint32 wav_Annatko_Len 	= 0;
+	Uint32 wav_Maistuu_Len 	= 0;
+	Uint32 wav_Voitit_Len 	= 0;
+
+	// Load WAV data.
+	if (SDL_LoadWAV(WAV_ANNATKO, &wav_Annatko, &wav_Annatko_Buf, &wav_Annatko_Len) == false) {
+		printf("SDL_LoadWAV: Error loading WAV data\n");
+		printf("SDL_LoadWAV: %s\n", SDL_GetError());
+		
+		SDL_DestroyTexture(tex_Annatko);
+		SDL_DestroyTexture(tex_Maistuu_1);
+		SDL_DestroyTexture(tex_Maistuu_2);
+		SDL_DestroyTexture(tex_Voitit);
+		SDL_DestroyTexture(tex_Havisit);
+
+		SDL_DestroySurface(png_Annatko);
+		SDL_DestroySurface(png_Maistuu_1);
+		SDL_DestroySurface(png_Maistuu_2);
+		SDL_DestroySurface(png_Voitit);
+		SDL_DestroySurface(png_Havisit);
+	
+		SDL_free(wav_Annatko_Buf);
+		SDL_free(wav_Maistuu_Buf);
+		SDL_free(wav_Voitit_Buf);
+		
+		SDL_DestroyRenderer(renderer);
+		SDL_DestroyWindow(window);
+
+		SDL_Quit();
+		return -1;
+		
+	}
+	if (SDL_LoadWAV(WAV_MAISTUU, &wav_Maistuu, &wav_Maistuu_Buf, &wav_Maistuu_Len) == false) {
+		printf("SDL_LoadWAV: Error loading WAV data\n");
+		printf("SDL_LoadWAV: %s\n", SDL_GetError());
+		
+		SDL_DestroyTexture(tex_Annatko);
+		SDL_DestroyTexture(tex_Maistuu_1);
+		SDL_DestroyTexture(tex_Maistuu_2);
+		SDL_DestroyTexture(tex_Voitit);
+		SDL_DestroyTexture(tex_Havisit);
+
+		SDL_DestroySurface(png_Annatko);
+		SDL_DestroySurface(png_Maistuu_1);
+		SDL_DestroySurface(png_Maistuu_2);
+		SDL_DestroySurface(png_Voitit);
+		SDL_DestroySurface(png_Havisit);
+	
+		SDL_free(wav_Annatko_Buf);
+		SDL_free(wav_Maistuu_Buf);
+		SDL_free(wav_Voitit_Buf);
+		
+		SDL_DestroyRenderer(renderer);
+		SDL_DestroyWindow(window);
+
+		SDL_Quit();
+		return -1;
+	
+	}
+
+	if (SDL_LoadWAV(WAV_VOITIT, &wav_Voitit, &wav_Voitit_Buf, &wav_Voitit_Len) == false) {
+		printf("SDL_LoadWAV: Error loading WAV data\n");
+		printf("SDL_LoadWAV: %s\n", SDL_GetError());
+		
+		SDL_DestroyTexture(tex_Annatko);
+		SDL_DestroyTexture(tex_Maistuu_1);
+		SDL_DestroyTexture(tex_Maistuu_2);
+		SDL_DestroyTexture(tex_Voitit);
+		SDL_DestroyTexture(tex_Havisit);
+
+		SDL_DestroySurface(png_Annatko);
+		SDL_DestroySurface(png_Maistuu_1);
+		SDL_DestroySurface(png_Maistuu_2);
+		SDL_DestroySurface(png_Voitit);
+		SDL_DestroySurface(png_Havisit);
+	
+		SDL_free(wav_Annatko_Buf);
+		SDL_free(wav_Maistuu_Buf);
+		SDL_free(wav_Voitit_Buf);
+
+		SDL_DestroyRenderer(renderer);
+		SDL_DestroyWindow(window);
+
+		SDL_Quit();
+		return -1;
+	
 	}
 
 	// Main loop
@@ -110,6 +242,37 @@ int main() {
 			running = false;
 		}
 		
+		// Audio
+		if (SDL_GetAudioStreamQueued(def_Stream) < (int)wav_Annatko_Len) {
+			if (SDL_PutAudioStreamData(def_Stream, wav_Annatko_Buf, (int)wav_Annatko_Len) == false) {
+						printf("SDL_PutAudioStreamData: Error putting data to default plauback stream\n");
+						printf("SDL_PutAudioStreamData: %s\n", SDL_GetError());
+		
+						SDL_DestroyTexture(tex_Annatko);
+						SDL_DestroyTexture(tex_Maistuu_1);
+						SDL_DestroyTexture(tex_Maistuu_2);
+						SDL_DestroyTexture(tex_Voitit);
+						SDL_DestroyTexture(tex_Havisit);
+
+						SDL_DestroySurface(png_Annatko);
+						SDL_DestroySurface(png_Maistuu_1);
+						SDL_DestroySurface(png_Maistuu_2);
+						SDL_DestroySurface(png_Voitit);
+						SDL_DestroySurface(png_Havisit);
+	
+						SDL_free(wav_Annatko_Buf);
+						SDL_free(wav_Maistuu_Buf);
+						SDL_free(wav_Voitit_Buf);
+
+						SDL_DestroyRenderer(renderer);
+						SDL_DestroyWindow(window);
+
+						SDL_Quit();
+						return -1;
+	
+			}
+		}	
+
 		// Render
 		SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
 		SDL_RenderClear(renderer);
@@ -130,6 +293,13 @@ int main() {
 	SDL_DestroySurface(png_Maistuu_2);
 	SDL_DestroySurface(png_Voitit);
 	SDL_DestroySurface(png_Havisit);
+	
+	SDL_free(wav_Annatko_Buf);
+	SDL_free(wav_Maistuu_Buf);
+	SDL_free(wav_Voitit_Buf);
+		
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
 
 	SDL_Quit();
 	return 0;
