@@ -197,6 +197,7 @@ int main() {
 		return -1;
 		
 	}
+
 	if (SDL_LoadWAV(WAV_MAISTUU, &wav_Maistuu, &wav_Maistuu_Buf, &wav_Maistuu_Len) == false) {
 		printf("SDL_LoadWAV: Error loading WAV data\n");
 		printf("SDL_LoadWAV: %s\n", SDL_GetError());
@@ -273,13 +274,23 @@ int main() {
 		SDL_MouseButtonFlags mouseButton = SDL_GetMouseState(&mouseX, &mouseY);
 
 		if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
-			if ((int)mouseX >= ui_Col_Kylla.upLCorner.x && (int)mouseX <= ui_Col_Kylla.downRCorner.x && (int)mouseY >= ui_Col_Kylla.upLCorner.y && (int)mouseY <= ui_Col_Kylla.downRCorner.y && mouseButton == SDL_BUTTON_LEFT) {
-				gState = MAISTUU;
+			if (gState == ANNATKO) {
+				// KYLLA
+				if ((int)mouseX >= ui_Col_Kylla.upLCorner.x && (int)mouseX <= ui_Col_Kylla.downRCorner.x && (int)mouseY >= ui_Col_Kylla.upLCorner.y && (int)mouseY <= ui_Col_Kylla.downRCorner.y && mouseButton == SDL_BUTTON_LEFT) {
+					gState = MAISTUU;
 				
-				x = false;
+					x = false;
 				
-			}	
-		
+				}	
+			
+				// EI
+				if ((int)mouseX >= ui_Col_Ei.upLCorner.x && (int)mouseX <= ui_Col_Ei.downRCorner.x && (int)mouseY >= ui_Col_Ei.upLCorner.y && (int)mouseY <= ui_Col_Ei.downRCorner.y && mouseButton == SDL_BUTTON_LEFT) {
+					gState = HAVISIT;
+				
+					x = false;
+				
+				}	
+			}
 		}
 		
 		if (e.type == SDL_EVENT_QUIT) {
@@ -380,9 +391,15 @@ int main() {
 
 			}		
 	
+			if (SDL_GetAudioStreamQueued(def_Stream) <= 0) {
+				gState = VOITIT;
+				x = false;				
+
+			}
+
 		}
 		
-		if (gState == VOITIT && x == false) {
+		if (gState == VOITIT) {
 			if (SDL_GetAudioStreamQueued(def_Stream) < (int)wav_Voitit_Len && x == false) {
 				if (SDL_PutAudioStreamData(def_Stream, wav_Voitit_Buf, (int)wav_Voitit_Len) == false) {
 					printf("SDL_PutAudioStreamData: Error putting data to default plauback stream\n");
@@ -421,9 +438,15 @@ int main() {
 			SDL_RenderClear(renderer);
 			SDL_RenderTexture(renderer, tex_Voitit, NULL, NULL);
 			
+			if(SDL_GetAudioStreamQueued(def_Stream) <= 0) {
+				gState = ANNATKO;
+				x = false;
+
+			}			
+			
 		}	
 		
-		if (gState == HAVISIT && x == false) {
+		if (gState == HAVISIT) {
 			SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
 			SDL_RenderClear(renderer);
 			SDL_RenderTexture(renderer, tex_Havisit, NULL, NULL);	
@@ -431,7 +454,14 @@ int main() {
 		}
 
 		SDL_RenderPresent(renderer);
-	
+		
+		if (gState == HAVISIT) {	
+			SDL_Delay(3000);
+			gState = ANNATKO;
+			x = false;
+
+		}
+
 	}
 
 	// Deinit SDL
